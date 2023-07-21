@@ -17,7 +17,8 @@ public class Player : MonoBehaviour
         // instantiate laser
         if (Input.GetKey(KeyCode.Space))
         {
-            Instantiate(_laserPrefab,transform.position,quaternion.identity);
+            Vector3 offsetPosition = transform.position+new Vector3(0,1.6f,0);
+            Instantiate(_laserPrefab,offsetPosition,quaternion.identity);
         }
         PlayerMovement();  
         CheckBound();
