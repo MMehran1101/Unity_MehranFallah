@@ -16,16 +16,18 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        // instantiate laser
+        PlayerMovement();
         if (Input.GetKey(KeyCode.Space) && Time.time > _canFire)
         {
-            _canFire = Time.time + _fireRate;
-            var offsetPosition = transform.position + new Vector3(0, 1.6f, 0);
-            Instantiate(_laserPrefab, offsetPosition, quaternion.identity);
+            FireLaser();
         }
+    }
 
-        PlayerMovement();
-        CheckBound();
+    private void FireLaser()
+    {
+        _canFire = Time.time + _fireRate;
+        var offsetPosition = transform.position + new Vector3(0, 1.6f, 0);
+        Instantiate(_laserPrefab, offsetPosition, quaternion.identity);
     }
 
     private void PlayerMovement()
@@ -34,8 +36,9 @@ public class Player : MonoBehaviour
         var verticalInput = Input.GetAxis("Vertical");
 
         var direction = new Vector3(horizontalInput, verticalInput, 0);
-
         transform.Translate(direction * _speed * Time.deltaTime);
+
+        CheckBound();
     }
 
     private void CheckBound()
@@ -43,17 +46,17 @@ public class Player : MonoBehaviour
         // Check X Axis
         if (transform.position.x > _xBound)
         {
-            transform.position = new Vector3(-_xBound, transform.position.y,0);
+            transform.position = new Vector3(-_xBound, transform.position.y, 0);
         }
         else if (transform.position.x < -_xBound)
         {
-            transform.position = new Vector3(_xBound, transform.position.y,0);
+            transform.position = new Vector3(_xBound, transform.position.y, 0);
         }
 
         // Check Y Axis
         if (transform.position.y > _yBound)
         {
-            transform.position = new Vector3(transform.position.x, -_yBound,0);
+            transform.position = new Vector3(transform.position.x, -_yBound, 0);
         }
         else if (transform.position.y < -_yBound)
         {
