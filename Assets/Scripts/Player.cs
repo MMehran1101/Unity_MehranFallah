@@ -19,6 +19,15 @@ public class Player : MonoBehaviour
         PlayerMovement();
         CheckCanFireLaser();
     }
+
+    private void EnemyInstantiate()
+    {
+        _enemyXPos = Random.Range(-9, 9);
+        _enemyYPos = Random.Range(8, 10);
+        Instantiate(_enemyPrefab, new Vector3(_enemyXPos, _enemyYPos, 0)
+            , quaternion.identity);
+    }
+
     private void CheckCanFireLaser()
     {
         if (Input.GetKey(KeyCode.Space) && Time.time > _canFire)
