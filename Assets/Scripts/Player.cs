@@ -3,14 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] private float _speed;
     [SerializeField] private GameObject _laserPrefab;
+    [SerializeField] private GameObject _enemyPrefab;
     private float _fireRate = 0.3f;
     private float _canFire = -1;
-
+    private float _enemyXPos, _enemyYPos;
     private float _xBound = 12.31f;
     private float _yBound = 7.37f;
 
