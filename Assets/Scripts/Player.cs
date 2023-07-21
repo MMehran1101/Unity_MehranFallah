@@ -6,21 +6,25 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private float _speed = 2f;
+    [SerializeField] private float _speed;
     [SerializeField] private GameObject _laserPrefab;
+    private float _fireRate = 0.3f;
+    private float _canFire = -1;
 
     private float _xBound = 12.31f;
     private float _yBound = 7.37f;
 
-    void Update()
+    private void Update()
     {
         // instantiate laser
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space) && Time.time > _canFire)
         {
-            Vector3 offsetPosition = transform.position+new Vector3(0,1.6f,0);
-            Instantiate(_laserPrefab,offsetPosition,quaternion.identity);
+            _canFire = Time.time + _fireRate;
+            var offsetPosition = transform.position + new Vector3(0, 1.6f, 0);
+            Instantiate(_laserPrefab, offsetPosition, quaternion.identity);
         }
-        PlayerMovement();  
+
+        PlayerMovement();
         CheckBound();
     }
 
