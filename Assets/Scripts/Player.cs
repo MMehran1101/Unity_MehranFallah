@@ -14,6 +14,11 @@ public class Player : MonoBehaviour
     private float _xBound = 12.31f;
     private float _yBound = 7.37f;
 
+    private void Start()
+    {
+        InvokeRepeating(nameof(EnemyInstantiate),1,Random.Range(2,6));
+    }
+
     private void Update()
     {
         PlayerMovement();
