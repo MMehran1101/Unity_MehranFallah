@@ -1,17 +1,24 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] private float _speed = 2f;
+    [SerializeField] private GameObject _laserPrefab;
 
     private float _xBound = 12.31f;
     private float _yBound = 7.37f;
 
     void Update()
     {
+        // instantiate laser
+        if (Input.GetKey(KeyCode.Space))
+        {
+            Instantiate(_laserPrefab,transform.position,quaternion.identity);
+        }
         PlayerMovement();  
         CheckBound();
     }
