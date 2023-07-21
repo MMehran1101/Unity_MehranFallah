@@ -7,16 +7,16 @@ public class Laser : MonoBehaviour
 {
     private float _speed = 8;
 
-    void Start()
+    private void Start()
     {
     }
 
-    void Update()
+    private void Update()
     {
         transform.Translate(Vector3.up * Time.deltaTime * _speed);
     }
 
-    void LateUpdate()
+    private void LateUpdate()
     {
         if (gameObject.transform.position.y> 10)
         {
