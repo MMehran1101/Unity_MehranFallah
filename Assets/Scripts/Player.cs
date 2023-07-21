@@ -17,6 +17,10 @@ public class Player : MonoBehaviour
     private void Update()
     {
         PlayerMovement();
+        CheckCanFireLaser();
+    }
+    private void CheckCanFireLaser()
+    {
         if (Input.GetKey(KeyCode.Space) && Time.time > _canFire)
         {
             FireLaser();
