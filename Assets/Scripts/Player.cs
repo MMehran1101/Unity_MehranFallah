@@ -3,20 +3,45 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] private float _speed;
     [SerializeField] private GameObject _laserPrefab;
+    [SerializeField] private int _lives = 3;
+
+    private SpawnManager _spawnManager;
+
     private float _fireRate = 0.3f;
     private float _canFire = -1;
-
     private float _xBound = 12.31f;
     private float _yBound = 7.37f;
+
+    private void Start()
+    {
+        _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+        if (_spawnManager == null) Debug.LogError("Spawn Manager is Null");
+    }
 
     private void Update()
     {
         PlayerMovement();
+        CheckCanFireLaser();
+    }
+
+    public void Damage()
+    {
+        _lives--;
+        if (_lives < 1)
+        {
+            _spawnManager.OnPlayerDeath();
+            Destroy(gameObject);
+        }
+    }
+
+    private void CheckCanFireLaser()
+    {
         if (Input.GetKey(KeyCode.Space) && Time.time > _canFire)
         {
             FireLaser();
