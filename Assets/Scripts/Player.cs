@@ -9,18 +9,12 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private float _speed;
     [SerializeField] private GameObject _laserPrefab;
-    [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private int _lives = 3;
     private float _fireRate = 0.3f;
     private float _canFire = -1;
-    private float _enemyXPos, _enemyYPos;
     private float _xBound = 12.31f;
     private float _yBound = 7.37f;
 
-    private void Start()
-    {
-        InvokeRepeating(nameof(EnemyInstantiate), 1, Random.Range(2, 6));
-    }
 
     private void Update()
     {
@@ -32,14 +26,6 @@ public class Player : MonoBehaviour
     {
         _lives--;
         if (_lives < 1) Destroy(gameObject);
-    }
-
-    private void EnemyInstantiate()
-    {
-        _enemyXPos = Random.Range(-9, 9);
-        _enemyYPos = Random.Range(8, 10);
-        Instantiate(_enemyPrefab, new Vector3(_enemyXPos, _enemyYPos, 0)
-            , quaternion.identity);
     }
 
     private void CheckCanFireLaser()
