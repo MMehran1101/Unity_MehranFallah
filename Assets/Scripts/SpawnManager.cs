@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using OpenCover.Framework.Model;
 using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -7,7 +8,8 @@ using Random = UnityEngine.Random;
 public class SpawnManager : MonoBehaviour
 {
     [SerializeField] private GameObject _enemyPrefab;
-
+    [SerializeField] private GameObject _enemyContainer;
+    private bool isStopSpawn = false;
     private float _enemyXPos;
 
     // Start is called before the first frame update
@@ -18,7 +20,7 @@ public class SpawnManager : MonoBehaviour
     
     private IEnumerator SpawnRoutine()
     {
-        while (true)
+        while (!isStopSpawn)
         {
             EnemyInstantiate();
             yield return new WaitForSeconds(Random.Range(3,5));
@@ -28,7 +30,13 @@ public class SpawnManager : MonoBehaviour
     private void EnemyInstantiate()
     {
         _enemyXPos = Random.Range(-9, 9);
-        Instantiate(_enemyPrefab, new Vector3(_enemyXPos, 10, 0)
+        var newEnemy = Instantiate(_enemyPrefab, new Vector3(_enemyXPos, 10, 0)
             , quaternion.identity);
+        newEnemy.transform.parent = _enemyContainer.transform;
+    }
+
+    public void OnPlayerDeath()
+    {
+        isStopSpawn = true;
     }
 }
