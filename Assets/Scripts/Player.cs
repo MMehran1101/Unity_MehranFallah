@@ -1,15 +1,12 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
-using Random = UnityEngine.Random;
+
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private float _speed;
-    [SerializeField] private GameObject _laserPrefab;
-    [SerializeField] private int _lives = 3;
+    [SerializeField] private float speed;
+    [SerializeField] private GameObject laserPrefab;
+    [SerializeField] private int lives = 3;
 
     private SpawnManager _spawnManager;
 
@@ -17,7 +14,7 @@ public class Player : MonoBehaviour
     private float _canFire = -1;
     private float _xBound = 12.31f;
     private float _yBound = 7.37f;
-
+                                            
     private void Start()
     {
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
@@ -25,15 +22,15 @@ public class Player : MonoBehaviour
     }
 
     private void Update()
-    {
+    {          
         PlayerMovement();
         CheckCanFireLaser();
     }
 
     public void Damage()
     {
-        _lives--;
-        if (_lives < 1)
+        lives--;
+        if (lives < 1)
         {
             _spawnManager.OnPlayerDeath();
             Destroy(gameObject);
@@ -52,7 +49,7 @@ public class Player : MonoBehaviour
     {
         _canFire = Time.time + _fireRate;
         var offsetPosition = transform.position + new Vector3(0, 1.6f, 0);
-        Instantiate(_laserPrefab, offsetPosition, quaternion.identity);
+        Instantiate(laserPrefab, offsetPosition, quaternion.identity);
     }
 
     private void PlayerMovement()
@@ -61,7 +58,7 @@ public class Player : MonoBehaviour
         var verticalInput = Input.GetAxis("Vertical");
 
         var direction = new Vector3(horizontalInput, verticalInput, 0);
-        transform.Translate(direction * _speed * Time.deltaTime);
+        transform.Translate(direction * (speed * Time.deltaTime));
 
         CheckBound();
     }

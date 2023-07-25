@@ -7,12 +7,12 @@ public class Enemy : MonoBehaviour
 {
     private float _speed = 4;
 
-    void Update()
+    private void Update()
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
