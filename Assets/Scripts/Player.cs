@@ -8,7 +8,8 @@ public class Player : MonoBehaviour
     [SerializeField] private float speed;
     private readonly float _speedMultiplier = 2;
     [SerializeField] private int lives = 3;
-
+    [SerializeField] private bool isShieldActive;
+    [SerializeField] private GameObject playerShield;
     [SerializeField] private GameObject laserPrefab;
     [SerializeField] private GameObject tripleLaserPrefab;
 
@@ -95,6 +96,12 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
+        if (isShieldActive)
+        {
+            isShieldActive = false;
+            playerShield.SetActive(false);
+            return;
+        }
         lives--;
         if (lives < 1)
         {
@@ -103,6 +110,12 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void ShieldActive()
+    {
+        isShieldActive = true;
+        playerShield.SetActive(true);
+    }
+    
     private void CheckBound()
     {
         // Check X Axis
