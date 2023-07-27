@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -6,10 +7,11 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private GameObject laserPrefab;
+    [SerializeField] private GameObject tripleLaserPrefab;
     [SerializeField] private int lives = 3;
-
+    
     private SpawnManager _spawnManager;
-
+    [SerializeField] bool _isTripleShotActive;
     private float _fireRate = 0.3f;
     private float _canFire = -1;
     private float _xBound = 12.31f;
@@ -37,6 +39,17 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void TripleShotActive()
+    {
+        _isTripleShotActive = true;
+        StartCoroutine(TripleShotPowerDownRoutine());
+    }
+
+    private IEnumerator TripleShotPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(5);
+        _isTripleShotActive = false;
+    }
     private void CheckCanFireLaser()
     {
         if (Input.GetKey(KeyCode.Space) && Time.time > _canFire)
@@ -48,7 +61,12 @@ public class Player : MonoBehaviour
     private void FireLaser()
     {
         _canFire = Time.time + _fireRate;
-        var offsetPosition = transform.position + new Vector3(0, 1.6f, 0);
+        if (_isTripleShotActive)
+        {
+            Instantiate(tripleLaserPrefab, transform.position, quaternion.identity);
+            return;
+        }
+        var offsetPosition = transform.position + new Vector3(0, 1.1f, 0);
         Instantiate(laserPrefab, offsetPosition, quaternion.identity);
     }
 
