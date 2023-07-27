@@ -31,7 +31,7 @@ public class PowerUp : MonoBehaviour
                         player.SpeedBoostActive();
                         break;
                     case 2:
-                        Debug.Log("Shield");
+                        player.ShieldActive();
                         break;
                     default:
                         Debug.LogWarning("Invalid Value set on powerUpID");
