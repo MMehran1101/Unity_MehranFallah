@@ -6,11 +6,12 @@ using Random = UnityEngine.Random;
 public class SpawnManager : MonoBehaviour
 {
     [SerializeField] private GameObject enemyPrefab;
-    [SerializeField] private GameObject tripleShotPowerUpPrefab;
+    [SerializeField] private GameObject[] powerups;
     [SerializeField] private GameObject powerUpContainer;
     [SerializeField] private GameObject enemyContainer;
     private bool _isStopSpawn;
     private float _spawnXPos;
+    private int _randomPowerup;
 
     // Start is called before the first frame update
     private void Start()
@@ -47,7 +48,9 @@ public class SpawnManager : MonoBehaviour
     private void PowerUpInstantiate()
     {
         _spawnXPos = Random.Range(-9, 9);
-        var newPowerUp = Instantiate(tripleShotPowerUpPrefab, new Vector3(_spawnXPos, 10, 0)
+        _randomPowerup = Random.Range(0, 2);
+        var newPowerUp = Instantiate(powerups[_randomPowerup]
+            , new Vector3(_spawnXPos, 10, 0)
             , quaternion.identity);
         newPowerUp.transform.parent = powerUpContainer.transform;
     }

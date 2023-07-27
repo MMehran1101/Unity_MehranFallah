@@ -6,17 +6,27 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] private float speed;
+    private readonly float _speedMultiplier = 2;
+    [SerializeField] private int lives = 3;
+
     [SerializeField] private GameObject laserPrefab;
     [SerializeField] private GameObject tripleLaserPrefab;
-    [SerializeField] private int lives = 3;
-    
+
     private SpawnManager _spawnManager;
-    [SerializeField] bool _isTripleShotActive;
+
+    private bool _isTripleShotActive;
+    [SerializeField] private bool isSpeedBoostActive;
+
     private float _fireRate = 0.3f;
     private float _canFire = -1;
+
     private float _xBound = 12.31f;
     private float _yBound = 7.37f;
-                                            
+
+    private float _horizontalInput;
+    private float _verticalInput;
+    private Vector3 _direction;
+
     private void Start()
     {
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
@@ -24,32 +34,21 @@ public class Player : MonoBehaviour
     }
 
     private void Update()
-    {          
+    {
         PlayerMovement();
         CheckCanFireLaser();
+        CheckBound();
     }
 
-    public void Damage()
+    private void PlayerMovement()
     {
-        lives--;
-        if (lives < 1)
-        {
-            _spawnManager.OnPlayerDeath();
-            Destroy(gameObject);
-        }
+        _horizontalInput = Input.GetAxis("Horizontal");
+        _verticalInput = Input.GetAxis("Vertical");
+        _direction = new Vector3(_horizontalInput, _verticalInput, 0);
+
+        transform.Translate(_direction * (speed * Time.deltaTime));
     }
 
-    public void TripleShotActive()
-    {
-        _isTripleShotActive = true;
-        StartCoroutine(TripleShotPowerDownRoutine());
-    }
-
-    private IEnumerator TripleShotPowerDownRoutine()
-    {
-        yield return new WaitForSeconds(5);
-        _isTripleShotActive = false;
-    }
     private void CheckCanFireLaser()
     {
         if (Input.GetKey(KeyCode.Space) && Time.time > _canFire)
@@ -66,19 +65,45 @@ public class Player : MonoBehaviour
             Instantiate(tripleLaserPrefab, transform.position, quaternion.identity);
             return;
         }
+
         var offsetPosition = transform.position + new Vector3(0, 1.1f, 0);
         Instantiate(laserPrefab, offsetPosition, quaternion.identity);
     }
 
-    private void PlayerMovement()
+    public void TripleShotActive()
     {
-        var horizontalInput = Input.GetAxis("Horizontal");
-        var verticalInput = Input.GetAxis("Vertical");
+        _isTripleShotActive = true;
+        StartCoroutine(TripleShotPowerDownRoutine());
+    }
 
-        var direction = new Vector3(horizontalInput, verticalInput, 0);
-        transform.Translate(direction * (speed * Time.deltaTime));
+    private IEnumerator TripleShotPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(5);
+        _isTripleShotActive = false;
+    }
 
-        CheckBound();
+    public void SpeedBoostActive()
+    {
+        isSpeedBoostActive = true;
+        speed *= _speedMultiplier;
+        StartCoroutine(SpeedBoostPowerDownRoutine());
+    }
+
+    private IEnumerator SpeedBoostPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(5);
+        speed /=_speedMultiplier;
+        isSpeedBoostActive = false;
+    }
+
+    public void Damage()
+    {
+        lives--;
+        if (lives < 1)
+        {
+            _spawnManager.OnPlayerDeath();
+            Destroy(gameObject);
+        }
     }
 
     private void CheckBound()
@@ -86,21 +111,25 @@ public class Player : MonoBehaviour
         // Check X Axis
         if (transform.position.x > _xBound)
         {
-            transform.position = new Vector3(-_xBound, transform.position.y, 0);
+            var transform1 = transform;
+            transform1.position = new Vector3(-_xBound, transform1.position.y, 0);
         }
         else if (transform.position.x < -_xBound)
         {
-            transform.position = new Vector3(_xBound, transform.position.y, 0);
+            var transform1 = transform;
+            transform1.position = new Vector3(_xBound, transform1.position.y, 0);
         }
 
         // Check Y Axis
         if (transform.position.y > _yBound)
         {
-            transform.position = new Vector3(transform.position.x, -_yBound, 0);
+            var transform1 = transform;
+            transform1.position = new Vector3(transform1.position.x, -_yBound, 0);
         }
         else if (transform.position.y < -_yBound)
         {
-            transform.position = new Vector3(transform.position.x, _yBound, 0);
+            var transform1 = transform;
+            transform1.position = new Vector3(transform1.position.x, _yBound, 0);
         }
     }
 }
