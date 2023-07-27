@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Laser : MonoBehaviour
 {
-    private float _speed = 8;
+    private float _speed = 10;
 
     private void Update()
     {
@@ -16,7 +16,7 @@ public class Laser : MonoBehaviour
     {
         if (gameObject.transform.position.y > 10)
         {
-            Destroy(gameObject);
+            Destroy(transform.parent != null ? transform.parent.gameObject : gameObject);
         }
     }
 }
