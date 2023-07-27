@@ -5,30 +5,32 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    private float _fireRate = 0.3f;
+    private float _canFire = -1;
+    private float _xBound = 12.31f;
+    private float _yBound = 7.37f;
+    private float _horizontalInput;
+    private float _verticalInput;
+    private Vector3 _direction;
+    
     [SerializeField] private float speed;
     private readonly float _speedMultiplier = 2;
     [SerializeField] private int lives = 3;
-    [SerializeField] private bool isShieldActive;
+    [SerializeField] private int score;
+
+    private bool _isShieldActive;
+    private bool _isTripleShotActive;
+
     [SerializeField] private GameObject playerShield;
     [SerializeField] private GameObject laserPrefab;
     [SerializeField] private GameObject tripleLaserPrefab;
 
+    private UIManager _uiManager;
     private SpawnManager _spawnManager;
-
-    private bool _isTripleShotActive;
-
-    private float _fireRate = 0.3f;
-    private float _canFire = -1;
-
-    private float _xBound = 12.31f;
-    private float _yBound = 7.37f;
-
-    private float _horizontalInput;
-    private float _verticalInput;
-    private Vector3 _direction;
 
     private void Start()
     {
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         if (_spawnManager == null) Debug.LogError("Spawn Manager is Null");
     }
@@ -96,9 +98,9 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
-        if (isShieldActive)
+        if (_isShieldActive)
         {
-            isShieldActive = false;
+            _isShieldActive = false;
             playerShield.SetActive(false);
             return;
         }
@@ -112,10 +114,15 @@ public class Player : MonoBehaviour
 
     public void ShieldActive()
     {
-        isShieldActive = true;
+        _isShieldActive = true;
         playerShield.SetActive(true);
     }
-    
+
+    public void AddScore(int points)
+    {
+        score += points;
+        _uiManager.UpdateScore(score);
+    }
     private void CheckBound()
     {
         // Check X Axis
