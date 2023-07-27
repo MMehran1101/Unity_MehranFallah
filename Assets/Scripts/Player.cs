@@ -15,7 +15,6 @@ public class Player : MonoBehaviour
     private SpawnManager _spawnManager;
 
     private bool _isTripleShotActive;
-    [SerializeField] private bool isSpeedBoostActive;
 
     private float _fireRate = 0.3f;
     private float _canFire = -1;
@@ -84,7 +83,6 @@ public class Player : MonoBehaviour
 
     public void SpeedBoostActive()
     {
-        isSpeedBoostActive = true;
         speed *= _speedMultiplier;
         StartCoroutine(SpeedBoostPowerDownRoutine());
     }
@@ -93,7 +91,6 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(5);
         speed /=_speedMultiplier;
-        isSpeedBoostActive = false;
     }
 
     public void Damage()
