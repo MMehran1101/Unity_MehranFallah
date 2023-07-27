@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Laser : MonoBehaviour
@@ -9,7 +6,7 @@ public class Laser : MonoBehaviour
 
     private void Update()
     {
-        transform.Translate(Vector3.up * Time.deltaTime * _speed);
+        transform.Translate(Vector3.up * (Time.deltaTime * _speed));
     }
 
     private void LateUpdate()

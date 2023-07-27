@@ -357,10 +357,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
+  lives: 3
   laserPrefab: {fileID: 3542208211785189138, guid: a9844d061475d5e44a5494f314b277ba, type: 3}
   tripleLaserPrefab: {fileID: 3976305703667437075, guid: 16b792047b7560f45b11306d9dc68ac4, type: 3}
-  lives: 3
-  _isTripleShotActive: 0
 --- !u!61 &1068122270
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -484,7 +483,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 1298741001600734693, guid: 7a06e54411e94ed4b88080e524350330, type: 3}
-  tripleShotPowerUpPrefab: {fileID: 1746736987811000638, guid: 98419e8ad0fa6ad46beea99493c5e856, type: 3}
+  powerups:
+  - {fileID: 1746736987811000638, guid: 98419e8ad0fa6ad46beea99493c5e856, type: 3}
+  - {fileID: 7641617593162002400, guid: 05a875d1e6fc2764b8510586a68671d3, type: 3}
+  - {fileID: 0}
   powerUpContainer: {fileID: 1326526179}
   enemyContainer: {fileID: 1943244169}
 --- !u!4 &1225957789
