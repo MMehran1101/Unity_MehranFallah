@@ -1,42 +1,59 @@
 using System.Collections;
-using System.Collections.Generic;
-using OpenCover.Framework.Model;
 using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class SpawnManager : MonoBehaviour
 {
-    [SerializeField] private GameObject _enemyPrefab;
-    [SerializeField] private GameObject _enemyContainer;
-    private bool isStopSpawn = false;
-    private float _enemyXPos;
+    [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private GameObject tripleShotPowerUpPrefab;
+    [SerializeField] private GameObject powerUpContainer;
+    [SerializeField] private GameObject enemyContainer;
+    private bool _isStopSpawn;
+    private float _spawnXPos;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        StartCoroutine(SpawnRoutine());
+        StartCoroutine(EnemySpawnRoutine());
+        StartCoroutine(PowerUpSpawnRoutine());
     }
     
-    private IEnumerator SpawnRoutine()
+    private IEnumerator EnemySpawnRoutine()
     {
-        while (!isStopSpawn)
+        while (!_isStopSpawn)
         {
             EnemyInstantiate();
-            yield return new WaitForSeconds(Random.Range(3,5));
+            yield return new WaitForSeconds(Random.Range(2,5));
         }
     }
-
     private void EnemyInstantiate()
     {
-        _enemyXPos = Random.Range(-9, 9);
-        var newEnemy = Instantiate(_enemyPrefab, new Vector3(_enemyXPos, 10, 0)
+        _spawnXPos = Random.Range(-9, 9);
+        var newEnemy = Instantiate(enemyPrefab, new Vector3(_spawnXPos, 10, 0)
             , quaternion.identity);
-        newEnemy.transform.parent = _enemyContainer.transform;
+        newEnemy.transform.parent = enemyContainer.transform;
+    }
+
+    private IEnumerator PowerUpSpawnRoutine()
+    {
+        while (!_isStopSpawn)
+        {
+            PowerUpInstantiate();
+            yield return new WaitForSeconds(Random.Range(5,9));
+        }
+
+    }
+    private void PowerUpInstantiate()
+    {
+        _spawnXPos = Random.Range(-9, 9);
+        var newPowerUp = Instantiate(tripleShotPowerUpPrefab, new Vector3(_spawnXPos, 10, 0)
+            , quaternion.identity);
+        newPowerUp.transform.parent = powerUpContainer.transform;
     }
 
     public void OnPlayerDeath()
     {
-        isStopSpawn = true;
+        _isStopSpawn = true;
     }
 }
