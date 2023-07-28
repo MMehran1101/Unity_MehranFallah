@@ -27,7 +27,7 @@ public class Enemy : MonoBehaviour
             if (player != null) player.Damage();
             _animator.SetTrigger(OnEnemyDeath);
             _speed = 0;
-            Destroy(gameObject,2.5f);
+            Destroy(gameObject, 2.5f);
         }
         else if (other.CompareTag("Laser"))
         {
@@ -35,7 +35,7 @@ public class Enemy : MonoBehaviour
             _player.AddScore(10);
             _animator.SetTrigger(OnEnemyDeath);
             _speed = 0;
-            Destroy(gameObject,2.5f);
+            Destroy(gameObject, 2.5f);
         }
     }
 }
