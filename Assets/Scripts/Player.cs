@@ -10,8 +10,7 @@ public class Player : MonoBehaviour
     private float _xBound = 12.31f;
     private float _yBound = 4.5f;
     private float _clampYAxis;
-    private float _horizontalInput;
-    private float _verticalInput;
+    private float _horizontalInput,_verticalInput;
     private Vector3 _direction;
 
     [SerializeField] private float speed;
@@ -25,8 +24,7 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject playerShield;
     [SerializeField] private GameObject laserPrefab;
     [SerializeField] private GameObject tripleLaserPrefab;
-    [SerializeField] private GameObject rightEngine;
-    [SerializeField] private GameObject leftEngine;
+    [SerializeField] private GameObject rightEngine,leftEngine;
 
     private UIManager _uiManager;
     private SpawnManager _spawnManager;
