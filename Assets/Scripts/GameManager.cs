@@ -12,12 +12,12 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.R)&&_isGameOver)
+        if (Input.GetKey(KeyCode.R) && _isGameOver)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex ) ;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
-    
+
     public void GameOver()
     {
         _isGameOver = true;
