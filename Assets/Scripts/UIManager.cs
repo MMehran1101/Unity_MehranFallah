@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -5,9 +6,10 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI scoreText;
-    [SerializeField] private GameObject gameOverText;
+    [SerializeField] private TextMeshProUGUI gameOverText;
     [SerializeField] private Image livesImg;
     [SerializeField] private Sprite[] livesSprites;
+
     public void UpdateScore(int updateScore)
     {
         scoreText.text = updateScore.ToString();
@@ -20,6 +22,20 @@ public class UIManager : MonoBehaviour
 
     public void GameOver()
     {
-        gameOverText.SetActive(true);
+        gameOverText.gameObject.SetActive(true);
+        StartCoroutine(GameOverFlicker());
+    }
+
+    private IEnumerator GameOverFlicker()
+    {
+        var i = 0;
+        while (i < 4)
+        {
+            gameOverText.text = null;
+            yield return new WaitForSeconds(0.5f);
+            gameOverText.text = "Game Over";
+            yield return new WaitForSeconds(0.5f);
+            i++;
+        }
     }
 }
