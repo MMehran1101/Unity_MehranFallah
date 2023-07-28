@@ -12,16 +12,15 @@ public class SpawnManager : MonoBehaviour
     private bool _isStopSpawn;
     private float _spawnXPos;
     private int _randomPowerup;
-
-    // Start is called before the first frame update
-    private void Start()
+    
+    public void StartSpawning()
     {
         StartCoroutine(EnemySpawnRoutine());
         StartCoroutine(PowerUpSpawnRoutine());
     }
-    
     private IEnumerator EnemySpawnRoutine()
     {
+        yield return new WaitForSeconds(2);
         while (!_isStopSpawn)
         {
             EnemyInstantiate();
@@ -38,6 +37,7 @@ public class SpawnManager : MonoBehaviour
 
     private IEnumerator PowerUpSpawnRoutine()
     {
+        yield return new WaitForSeconds(3);
         while (!_isStopSpawn)
         {
             PowerUpInstantiate();

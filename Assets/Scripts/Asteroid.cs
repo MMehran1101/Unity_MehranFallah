@@ -1,32 +1,31 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.UI;
-using Random = UnityEngine.Random;
+
 
 public class Asteroid : MonoBehaviour
 {
     private float _speedOfRotation = 20;
-    private float _speed = 3;
-
+    private SpawnManager _spawnManager;
     [SerializeField] private GameObject explosion;
 
-    void Update()
+    private void Start()
+    {
+        _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+    }
+
+    private void Update()
     {
         transform.Rotate(0, 0, _speedOfRotation * Time.deltaTime);
-        transform.Translate(Vector3.down * (_speed * Time.deltaTime));
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Laser"))
         {
-            Instantiate(explosion, transform.position,
-                quaternion.identity);
+            Instantiate(explosion, transform.position, quaternion.identity);
             Destroy(other.gameObject);
-            Destroy(this.gameObject,0.5f);
+            _spawnManager.StartSpawning();
+            Destroy(this.gameObject, 0.5f);
         }
     }
 }
