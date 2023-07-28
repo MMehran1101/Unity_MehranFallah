@@ -8,7 +8,8 @@ public class Player : MonoBehaviour
     private float _fireRate = 0.3f;
     private float _canFire = -1;
     private float _xBound = 12.31f;
-    private float _yBound = 7.37f;
+    private float _yBound = 4.5f;
+    private float clampYAxis;
     private float _horizontalInput;
     private float _verticalInput;
     private Vector3 _direction;
@@ -139,15 +140,8 @@ public class Player : MonoBehaviour
         }
 
         // Check Y Axis
-        if (transform.position.y > _yBound)
-        {
-            var transform1 = transform;
-            transform1.position = new Vector3(transform1.position.x, -_yBound, 0);
-        }
-        else if (transform.position.y < -_yBound)
-        {
-            var transform1 = transform;
-            transform1.position = new Vector3(transform1.position.x, _yBound, 0);
-        }
+        clampYAxis = Mathf.Clamp(transform.position.y, -_yBound, _yBound);
+        transform.position = new Vector3(transform.position.x,clampYAxis,0);
+        
     }
 }
