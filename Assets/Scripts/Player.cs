@@ -8,11 +8,11 @@ public class Player : MonoBehaviour
     private float _fireRate = 0.3f;
     private float _canFire = -1;
     private float _xBound = 12.31f;
-    private float _yBound = 7.37f;
-    private float _horizontalInput;
-    private float _verticalInput;
+    private float _yBound = 4.5f;
+    private float _clampYAxis;
+    private float _horizontalInput,_verticalInput;
     private Vector3 _direction;
-    
+
     [SerializeField] private float speed;
     private readonly float _speedMultiplier = 2;
     [SerializeField] private int lives = 3;
@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject playerShield;
     [SerializeField] private GameObject laserPrefab;
     [SerializeField] private GameObject tripleLaserPrefab;
+    [SerializeField] private GameObject rightEngine,leftEngine;
 
     private UIManager _uiManager;
     private SpawnManager _spawnManager;
@@ -93,7 +94,7 @@ public class Player : MonoBehaviour
     private IEnumerator SpeedBoostPowerDownRoutine()
     {
         yield return new WaitForSeconds(5);
-        speed /=_speedMultiplier;
+        speed /= _speedMultiplier;
     }
 
     public void Damage()
@@ -104,7 +105,12 @@ public class Player : MonoBehaviour
             playerShield.SetActive(false);
             return;
         }
+
         lives--;
+
+        if (lives == 2) rightEngine.SetActive(true);
+        else if (lives == 1) leftEngine.SetActive(true);
+
         _uiManager.UpdateLives(lives);
         if (lives < 1)
         {
@@ -124,6 +130,7 @@ public class Player : MonoBehaviour
         score += points;
         _uiManager.UpdateScore(score);
     }
+
     private void CheckBound()
     {
         // Check X Axis
@@ -139,15 +146,7 @@ public class Player : MonoBehaviour
         }
 
         // Check Y Axis
-        if (transform.position.y > _yBound)
-        {
-            var transform1 = transform;
-            transform1.position = new Vector3(transform1.position.x, -_yBound, 0);
-        }
-        else if (transform.position.y < -_yBound)
-        {
-            var transform1 = transform;
-            transform1.position = new Vector3(transform1.position.x, _yBound, 0);
-        }
+        _clampYAxis = Mathf.Clamp(transform.position.y, -_yBound, _yBound);
+        transform.position = new Vector3(transform.position.x, _clampYAxis, 0);
     }
 }

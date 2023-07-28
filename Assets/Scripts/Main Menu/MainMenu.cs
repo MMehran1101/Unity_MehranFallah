@@ -1,18 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour
+namespace Main_Menu
 {
-    public void StartGame()
+    public class MainMenu : MonoBehaviour
     {
-        SceneManager.LoadScene(1);
-    }
-    public void ExitGame()
-    {
-        EditorApplication.ExitPlaymode();
-    }
+        public void StartGame()
+        {
+            SceneManager.LoadScene(1);
+        }
+        public void ExitGame()
+        {
+            EditorApplication.ExitPlaymode();
+        }
 
+    }
 }
