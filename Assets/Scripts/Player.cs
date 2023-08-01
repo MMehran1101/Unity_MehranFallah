@@ -1,5 +1,6 @@
 using System.Collections;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -11,29 +12,49 @@ public class Player : MonoBehaviour
     private float _yBound = 4.5f;
     private float _clampYAxis;
     private float _horizontalInput,_verticalInput;
+    
     private Vector3 _direction;
 
-    [SerializeField] private float speed;
+    private UIManager _uiManager;
+    private SpawnManager _spawnManager;
+    
     private readonly float _speedMultiplier = 2;
+    [Header("Player Properties")]
+    [SerializeField] private float speed;
     [SerializeField] private int lives = 3;
     [SerializeField] private int score;
 
-    private bool _isShieldActive;
-    private bool _isTripleShotActive;
+    [Header("State of Powerups")]
+    [SerializeField]private bool isShieldActive;
+    [SerializeField]private bool isTripleShotActive;
 
+    [Header("Game Objects")]
     [SerializeField] private GameObject playerShield;
     [SerializeField] private GameObject laserPrefab;
     [SerializeField] private GameObject tripleLaserPrefab;
     [SerializeField] private GameObject rightEngine,leftEngine;
+    
+    private AudioSource _audioSource;
+    [Header("Audios")]
+    [SerializeField] private AudioClip laserAudioClip;
+    [SerializeField] private AudioClip explosionAudioClip;
 
-    private UIManager _uiManager;
-    private SpawnManager _spawnManager;
 
     private void Start()
     {
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        CheckGameObjectNull(_uiManager, "UI Manager");
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
-        if (_spawnManager == null) Debug.LogError("Spawn Manager is Null");
+        CheckGameObjectNull(_spawnManager, "Spawn Manager");
+        _audioSource = GetComponent<AudioSource>();
+        CheckGameObjectNull(_audioSource, "Audio Source");        
+
+    }
+
+    private void CheckGameObjectNull(object myObject,string nameOfObject)
+    {
+        if (myObject == null) 
+            ShooterLogger.LogError($"{nameOfObject} is NULL.");
     }
 
     private void Update()
@@ -62,27 +83,35 @@ public class Player : MonoBehaviour
 
     private void FireLaser()
     {
+        _audioSource.clip = laserAudioClip;
         _canFire = Time.time + _fireRate;
-        if (_isTripleShotActive)
+        CheckIsTripleShot();
+        _audioSource.Play();
+    }
+
+    private void CheckIsTripleShot()
+    {
+        if (isTripleShotActive)
         {
             Instantiate(tripleLaserPrefab, transform.position, quaternion.identity);
-            return;
         }
-
-        var offsetPosition = transform.position + new Vector3(0, 1.1f, 0);
-        Instantiate(laserPrefab, offsetPosition, quaternion.identity);
+        else
+        {
+            var offsetPosition = transform.position + new Vector3(0, 1.1f, 0);
+            Instantiate(laserPrefab, offsetPosition, quaternion.identity);
+        }
     }
 
     public void TripleShotActive()
     {
-        _isTripleShotActive = true;
+        isTripleShotActive = true;
         StartCoroutine(TripleShotPowerDownRoutine());
     }
 
     private IEnumerator TripleShotPowerDownRoutine()
     {
         yield return new WaitForSeconds(5);
-        _isTripleShotActive = false;
+        isTripleShotActive = false;
     }
 
     public void SpeedBoostActive()
@@ -99,9 +128,9 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
-        if (_isShieldActive)
+        if (isShieldActive)
         {
-            _isShieldActive = false;
+            isShieldActive = false;
             playerShield.SetActive(false);
             return;
         }
@@ -114,6 +143,8 @@ public class Player : MonoBehaviour
         _uiManager.UpdateLives(lives);
         if (lives < 1)
         {
+            _audioSource.clip = explosionAudioClip;
+            _audioSource.Play();
             _spawnManager.OnPlayerDeath();
             Destroy(gameObject);
         }
@@ -121,7 +152,7 @@ public class Player : MonoBehaviour
 
     public void ShieldActive()
     {
-        _isShieldActive = true;
+        isShieldActive = true;
         playerShield.SetActive(true);
     }
 
