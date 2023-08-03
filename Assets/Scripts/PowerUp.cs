@@ -1,9 +1,11 @@
+using System;
 using UnityEngine;
 
 public class PowerUp : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private int powerUpID;
+    [SerializeField] private AudioClip audioClip;
 
     private void Update()
     {
@@ -22,6 +24,7 @@ public class PowerUp : MonoBehaviour
             var player = other.GetComponent<Player>();
             if (player != null)
             {
+                AudioSource.PlayClipAtPoint(audioClip,transform.position);
                 switch (powerUpID)
                 {
                     case 0:

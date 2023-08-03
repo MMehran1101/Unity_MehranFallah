@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Post Processing Profile
   m_EditorClassIdentifier: 
   settings:
-  - {fileID: 3230632228951589359}
---- !u!114 &3230632228951589359
+  - {fileID: 6319236284384615729}
+--- !u!114 &6319236284384615729
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -26,16 +26,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48a79b01ea5641d4aa6daa2e23605641, type: 3}
   m_Name: Bloom
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   enabled:
     overrideState: 1
     value: 1
   intensity:
     overrideState: 1
-    value: 10
+    value: 0
   threshold:
-    overrideState: 1
-    value: 1
+    overrideState: 0
+    value: 0
   softKnee:
     overrideState: 1
     value: 0.5
